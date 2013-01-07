@@ -1,0 +1,18 @@
+name: MaxClans
+version: 0.3
+main: org.maxgamer.maxclans.MaxClans
+authors: [Netherfoam]
+
+soft-depend: [Herochat, Vault]
+
+description: MaxGamer clans plugin
+website: http://maxgamer.org
+
+commands:
+    clan:
+        description: View clan menu
+        usage: /clan
+    clanadmin:
+        description: Clan admin commands
+        usage: /ca
+        aliases: [ca]

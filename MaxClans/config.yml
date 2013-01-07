@@ -1,0 +1,6 @@
+clan:
+    cost: 5000
+    chest-rows: 2 #Number of chest rows for /clan chest
+    
+blacklisted:
+    - arena
