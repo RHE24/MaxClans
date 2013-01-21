@@ -101,7 +101,6 @@ public class ClanManager{
 				ClanChest cc = new ClanChest(clan, inv, MaxClans.instance.getConfig().getInt("clan.chest-rows") * 9);
 				clan.setClanChest(cc);
 				
-				//chests.put(inv, clan);
 				name = name.toLowerCase();
 				clans.put(name, clan);
 				clan_names.add(name);
