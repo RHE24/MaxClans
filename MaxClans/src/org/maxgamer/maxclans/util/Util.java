@@ -22,9 +22,23 @@ public class Util{
 		values[n] = null;
 	}
 	
+	/**
+	 * Converts the given byte[] into a new inventory.
+	 * @param bytes The byte[] representation of the inventory, see getBytes(Inventory inv);
+	 * @param name The name of the inventory to be created
+	 * @param size The size of the inventory to be created
+	 * @return the inventory
+	 * @throws ClassNotFoundException If this version of MaxClans is not updated enough
+	 */
 	public static Inventory getInventory(byte[] bytes, String name, int size) throws ClassNotFoundException{
 		return NMS.getInventory(bytes, name, size);
 	}
+	/**
+	 * Converts the given Inventory into a byte[] for storage
+	 * @param inv The inventory to convert
+	 * @return The byte[]
+	 * @throws ClassNotFoundException If this version of MaxClans is not updated enough
+	 */
 	public static byte[] getBytes(Inventory inv) throws ClassNotFoundException{
 		return NMS.getBytes(inv);
 	}
