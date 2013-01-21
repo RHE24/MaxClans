@@ -1,6 +1,8 @@
 package org.maxgamer.maxclans.util;
 import java.util.regex.Pattern;
 
+import org.bukkit.inventory.Inventory;
+
 public class Util{	
 	private static Pattern VALID_CHARS_PATTERN = Pattern.compile("[A-Za-z0-9_ ]");
 	/**
@@ -18,5 +20,12 @@ public class Util{
 			values[i] = values[i - 1];
 		}
 		values[n] = null;
+	}
+	
+	public static Inventory getInventory(byte[] bytes, String name, int size) throws ClassNotFoundException{
+		return NMS.getInventory(bytes, name, size);
+	}
+	public static byte[] getBytes(Inventory inv) throws ClassNotFoundException{
+		return NMS.getBytes(inv);
 	}
 }

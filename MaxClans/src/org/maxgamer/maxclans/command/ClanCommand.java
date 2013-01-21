@@ -52,6 +52,13 @@ public class ClanCommand implements CommandExecutor, Listener{
 		cm.getClan().getClanChest().removeViewer(cm.getPlayer());
 	}
 	
+	public void addCommand(BaseCommand base, String name, String... aliases){
+		name = name.toLowerCase();
+		commands.put(name, base);
+		
+		addAlias(name, aliases);
+	}
+	
 	public ClanCommand(){
 		createMessages.add(ChatColor.RED + "%1$s "+ChatColor.GREEN+"has brought rise to "+ChatColor.RED+"%2$s"+ChatColor.GREEN+"!");
 		createMessages.add(ChatColor.RED + "%1$s "+ChatColor.GREEN+"has forged "+ChatColor.RED+"%2$s"+ChatColor.GREEN+"!");
