@@ -35,9 +35,7 @@ public class ClanChest{
 	/** Returns a String representation of the items in this chest in NBT form */
 	public byte[] getNBTBytes(){
 		try {
-			byte[] bytes = Util.getBytes(inv);
-			lastUpdate = bytes;
-			return bytes;
+			return Util.getBytes(inv);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("MaxClans is incompatible with this build of bukkit.");
@@ -93,10 +91,9 @@ public class ClanChest{
 		if(!force && !hasChanged) return; //Hasnt changed, not forced.
 		hasChanged = false;
 		
-		byte[] now = this.getNBTBytes();
+		byte[] now = this.getNBTBytes(); //This changes this.lastUpdate!
 		if(!force && lastUpdate.length == now.length && lastUpdate.equals(now)){
 			//Nothing has changed
-			System.out.println("Nothing has changed.");
 			return;
 		}
 		lastUpdate = now;
