@@ -305,6 +305,8 @@ public class ClanCommand implements CommandExecutor, Listener{
 				while(cmTarg.getRank() < 3){
 					cm.getClan().promote(cmTarg);
 				}
+				cm.update();
+				cmTarg.update();
 				
 				sender.sendMessage(ChatColor.RED + "You have transferred clan ownership to " + cmTarg.getName() + ". You are no longer the Clan Master.");
 				cm.getClan().sendMessage(ChatColor.GREEN + cm.getName() + " has given " + cmTarg.getName() + " full control of the clan and resigned from Clan Master.", 0, cm);
