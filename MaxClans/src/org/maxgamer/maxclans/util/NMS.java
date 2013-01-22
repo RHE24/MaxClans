@@ -16,7 +16,7 @@ public class NMS{
 		 * **       1.4       ** *
 		 * ***********************/
 		try{
-			dep = new NMSDependent(){
+			dep = new NMSDependent(""){
 				@Override
 				public Inventory getInventory(byte[] bytes, String name, int size){
 					//Fetch the String and convert it back to a byte[], then decompress it into a NBTTagCompound.
@@ -84,7 +84,7 @@ public class NMS{
 			/* ***********************
 			 * **      1.4.5      ** *
 			 * ***********************/
-			dep = new NMSDependent(){
+			dep = new NMSDependent("v1_4_5"){
 				@Override
 				public Inventory getInventory(byte[] bytes, String name, int size){
 					//Fetch the String and convert it back to a byte[], then decompress it into a NBTTagCompound.
@@ -152,7 +152,7 @@ public class NMS{
 			/* ***********************
 			 * **      1.4.6      ** *
 			 * ***********************/
-			dep = new NMSDependent(){
+			dep = new NMSDependent("v1_4_6"){
 				@Override
 				public Inventory getInventory(byte[] bytes, String name, int size){
 					//Fetch the String and convert it back to a byte[], then decompress it into a NBTTagCompound.
@@ -221,7 +221,7 @@ public class NMS{
 			/* ***********************
 			 * **      1.4.7      ** *
 			 * ***********************/
-			dep = new NMSDependent(){
+			dep = new NMSDependent("v1_4_R1"){
 				@Override
 				public Inventory getInventory(byte[] bytes, String name, int size){
 					//Fetch the String and convert it back to a byte[], then decompress it into a NBTTagCompound.
@@ -297,48 +297,41 @@ public class NMS{
 	 * @throws ClassNotFoundException If this version of maxclans isnt up to date enough with bukkit
 	 */
 	public static byte[] getBytes(Inventory inv) throws ClassNotFoundException{
-		if(nms == null){ //We haven't found it yet.
-			for(NMSDependent dep : dependents.values()){
-				try{
-					byte[] bytes = dep.getBytes(inv);
-					nms = dep; //If we made it this far, we've found a working version.
-					return bytes; //End of loop.
-				}
-				catch(Exception e){}
-				catch(Error e){}
-			}
-			throw new ClassNotFoundException("This version of MaxClans is incompatible."); //We haven't got code to support your version!
-		}
-		else{ //We have a known getter
-			return nms.getBytes(inv);
-		}
+		validate();
+		return nms.getBytes(inv);
 	}
 	
 	public static Inventory getInventory(byte[] bytes, String name, int size) throws ClassNotFoundException{
-		if(nms == null){ //We haven't found it yet.
-			for(NMSDependent dep : dependents.values()){
-				System.out.println("Searching...");
-				try{
-					Inventory inv = dep.getInventory(bytes, name, size);
-					nms = dep; //If we made it this far, we've found a working version.
-					return inv; //End of loop.
-				}
-				catch(Exception e){
-					e.printStackTrace();
-				}
-				catch(Error e){
-					e.printStackTrace();
-				}
-			}
-			throw new ClassNotFoundException("This version of MaxClans is incompatible."); //We haven't got code to support your version!
-		}
-		else{ //We have a known getter
-			return nms.getInventory(bytes, name, size);
-		}
+		validate();
+		return nms.getInventory(bytes, name, size);
 	}
 	
-	private interface NMSDependent{
-		public byte[] getBytes(Inventory inv);
-		public Inventory getInventory(byte[] bytes, String name, int size);
+	/**
+	 * Finds the proper NMS version.  If a version is already
+	 * selected, this method does nothing, even if the version
+	 * is invalid.
+	 * @throws ClassNotFoundException If there is no found working version.
+	 */
+	private static void validate() throws ClassNotFoundException{
+		if(nms != null) return;
+		for(NMSDependent dep : dependents.values()){
+			if(dep.isValid() == false) continue;
+			nms = dep;
+			return;
+		}
+		throw new ClassNotFoundException("This version of MaxClans is incompatible."); //We haven't got code to support your version!
+	}
+	
+	private static abstract class NMSDependent{
+		private String version;
+		/** @param version The version string, e.g. v1_4_R1 or v_1_4_5 */
+		public NMSDependent(String version){ this.version = version; }
+		public abstract byte[] getBytes(Inventory inv);
+		public abstract Inventory getInventory(byte[] bytes, String name, int size);
+		/** Returns true if this can be used as a NMS version */
+		public boolean isValid(){
+			try{ Class.forName("net.minecraft.server"+(version == null || version.isEmpty() ? "" : "."+version)+".ItemStack"); return true; }
+			catch(ClassNotFoundException e){ return false; }
+		}
 	}
 }
