@@ -13,13 +13,13 @@ public class MySQL implements DatabaseCore{
 	
 	private Connection connection;
 	
-	public MySQL(String url, String user, String pass){
+	private MySQL(String url, String user, String pass){
 		this.url = url;
 		this.user = user;
 		this.pass = pass;
 	}
 	public MySQL(String host, String user, String pass, String database, String port){
-		this("jdbc:mysql://"+host+":"+port+"/"+database, user, pass);
+		this("jdbc:mysql://"+host+":"+port+"/"+database+"?autoReconnect=true", user, pass);
 	}
 	
 	
