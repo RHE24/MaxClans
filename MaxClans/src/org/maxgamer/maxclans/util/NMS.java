@@ -33,9 +33,9 @@ public class NMS{
 						//The item has a tag "index", where it is stored in the chest
 						int index = item.getInt("index");
 						//Create an itemstack from the nbt tag
-						net.minecraft.server.ItemStack is = net.minecraft.server.ItemStack.a(item);
+						net.minecraft.server.ItemStack is = net.minecraft.server.ItemStack.createStack(item);
 						//Convert that itemstack into a craftbukkit itemstack
-						ItemStack cis = org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitStack(is);
+						ItemStack cis = org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(is);
 						//Put the itemstack in the inventory.
 						inv.setItem(index, cis);
 					}
@@ -55,7 +55,7 @@ public class NMS{
 						org.bukkit.craftbukkit.inventory.CraftItemStack cis = (org.bukkit.craftbukkit.inventory.CraftItemStack) inv.getItem(index);
 						if(cis != null){ //If cis == null, no item is there, ignore it.
 							//Convert it to a NMS itemstack
-							net.minecraft.server.ItemStack is = org.bukkit.craftbukkit.inventory.CraftItemStack.createNMSItemStack(cis);
+							net.minecraft.server.ItemStack is = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(cis);
 							//Save the NMS itemstack to a new NBT tag
 							net.minecraft.server.NBTTagCompound itemCompound = new net.minecraft.server.NBTTagCompound();
 							itemCompound = is.save(itemCompound);
