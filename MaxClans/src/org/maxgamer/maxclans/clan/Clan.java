@@ -65,9 +65,13 @@ public class Clan{
 		rating += kdr * 7.5;
 		rating += this.levels;
 		rating += this.getGuests().size() * 5;
-		rating += this.getBalance() * 0.2;
+		rating += 400 * (Math.log10(this.getBalance() / 1000 + 20) - 1.3);
+		//Cash Chart:
+		// $10k: 	70 Points
+		// $100k: 210 Points
+		// $1m: 	690 Points
 		
-		return (int) rating;
+		return (int)  rating;
 	}
 	
 	public double getKDR(){
@@ -227,7 +231,6 @@ public class Clan{
 		Database db = ClanManager.getDatabase();
 		String ally = c.name;
 		
-		//db.execute("INSERT INTO allies (name, ally) VALUES ('" + name + "', '" + ally + "')");
 		db.execute("INSERT INTO allies (name, ally) VALUES (?, ?)", name, ally);
 	}
 	/** Deletes the given ally from this clans list of allies.  Also updates the database */
@@ -237,7 +240,6 @@ public class Clan{
 		
 		String ally = c.name;
 		
-		//db.execute("DELETE FROM allies WHERE name = '" + name + "' AND ally = '" + ally + "'");
 		db.execute("DELETE FROM allies WHERE name = ? AND ally = ?", name, ally);
 	}
 	/** Adds the given enemy to this clans list of enemies.  Also updates the database */
@@ -247,7 +249,6 @@ public class Clan{
 		
 		String enemy = c.name;
 		
-		//db.execute("INSERT INTO enemies (name, enemy) VALUES ('" + name + "', '" + enemy + "')");
 		db.execute("INSERT INTO enemies (name, enemy) VALUES (?, ?)", name, enemy);
 	}
 	/** Deletes the given enemy from this clans list of enemies.  Also updates the database */
@@ -257,7 +258,6 @@ public class Clan{
 		
 		String enemy = c.name;
 		
-		//db.execute("DELETE FROM enemies WHERE name = '" + name + "' AND enemy = '" + enemy + "'");
 		db.execute("DELETE FROM enemies WHERE name = ? AND enemy = ?", name, enemy);
 	}
 	
@@ -391,7 +391,6 @@ public class Clan{
 		Database db = ClanManager.getDatabase();
 		String world = this.spawnWorld;
 		
-		//db.execute("UPDATE clans SET ff = '" + (this.friendlyFire ? 1 : 0) + "', spawnWorld = '" + world + "', spawnX = '" + spawnX + "', spawnY = '" + spawnY + "', spawnZ = '" + spawnZ + "', spawnYaw = '" + spawnYaw + "', spawnPitch = '" + spawnPitch + "', isOpen = '" + (isOpen ? 1 : 0) + "', motd = '" + db.escape(motd) + "', levels = '" + levels + "', kills = '" + kills + "', deaths = '" + deaths + "', respawn = '" + (respawn ? 1 : 0) + "' WHERE name = '" + name + "'");
 		db.execute("UPDATE clans SET ff = ?, spawnWorld = ?, spawnX = ?, spawnY = ?, spawnZ = ?, spawnYaw = ?, spawnPitch = ?, isOpen = ?, motd = ?, levels = ?, kills = ?, deaths = ?, respawn = ? WHERE name = ?", (this.friendlyFire ? 1 : 0), world, spawnX, spawnY, spawnZ, spawnYaw, spawnPitch, (isOpen ? 1 : 0), motd, levels, kills, deaths, (respawn ? 1 : 0), name);
 	}
 	
