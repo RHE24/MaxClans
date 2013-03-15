@@ -27,7 +27,7 @@ public class Database {
 	 * Reschedules the db watcher
 	 */
 	public void scheduleWatcher(){
-		this.task = Bukkit.getScheduler().runTaskLater(MaxClans.instance, this.dbw, 300);
+		this.task = Bukkit.getScheduler().runTaskLaterAsynchronously(MaxClans.instance, this.dbw, 300);
 	}
 	
 	public BukkitTask getTask(){
