@@ -24,6 +24,8 @@ public class Converter{
 	public static boolean convert_02_03() throws Exception{
 		Database db = ClanManager.getDatabase();
 		
+		if(db.hasTable("clans") == false) return false;
+		
 		PreparedStatement ps = db.getConnection().prepareStatement("SELECT * FROM clans");
 		ResultSet rs = ps.executeQuery();
 		
