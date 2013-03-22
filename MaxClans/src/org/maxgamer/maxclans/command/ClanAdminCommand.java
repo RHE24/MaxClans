@@ -119,6 +119,46 @@ public class ClanAdminCommand implements CommandExecutor{
 		setname.description = "Force changes a clan name!";
 		
 		commands.put("setname", setname);
+		
+		//invite
+		BaseCommand invite = new BaseCommand(){
+			@Override
+			public void onRun(CommandSender sender, String[] args) {
+				Player p = (Player) sender;
+				ClanMember inviter = ClanManager.getClanMember(p.getName());
+				if(inviter == null || inviter.getClan() == null){
+					sender.sendMessage(ChatColor.RED + "You have no clan!");
+					return;
+				}
+				
+				
+				ClanMember invited = ClanManager.getClanMember(args[1]);
+				if(invited == null){
+					sender.sendMessage(ChatColor.RED + "No such clan user found: " + args[1]);
+					return;
+				}
+				
+				if(invited.getClan() == null){
+					invited.getClan().kick(invited);
+				}
+				
+				inviter.getClan().add(invited);
+				
+				Player inv = invited.getPlayer();
+				if(inv != null) inv.sendMessage(ChatColor.YELLOW + "You have been forced to join " + inviter.getClan().getName() + " by an admin.");
+				
+				p.sendMessage(ChatColor.GREEN + "Success. Forced " + invited.getName() + " into " + inviter.getClan().getName() + ".");
+			}
+			
+		};
+		invite.console = false;
+		invite.needsClan = true;
+		invite.num_args = 2;
+		invite.perm = "maxclans.admin.invite";
+		invite.usage = "/clan invite user";
+		invite.description = "Forces a user to join your clan!";
+		
+		commands.put("setname", setname);
 	}
 	
 	@Override
