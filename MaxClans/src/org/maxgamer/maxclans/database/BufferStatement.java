@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class BufferStatement{
 	private Object[] values;
 	private String query;
+	private Exception stacktrace;
 	
 	/**
 	 * Represents a PreparedStatement in a state before preparing it (E.g. No file I/O Required)
@@ -17,6 +18,8 @@ public class BufferStatement{
 	public BufferStatement(String query, Object... values){
 		this.query = query;
 		this.values = values;
+		this.stacktrace = new Exception(); //For error handling
+		this.stacktrace.fillInStackTrace(); //We can declare where this statement came from.
 	}
 	/**
 	 * Returns a prepared statement using the given connection.
@@ -28,29 +31,26 @@ public class BufferStatement{
 	 * @param con The connection to prepare this on using con.prepareStatement(..)
 	 * @return The prepared statement, ready for execution.
 	 */
-	public PreparedStatement prepareStatement(Connection con){
-		try {
-			PreparedStatement ps;
-			ps = con.prepareStatement(query);
-			for(int i = 1; i <= values.length; i++){
-				ps.setObject(i, values[i-1]);
-			}
-			return ps;
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Could not do query!");
-			System.out.println(this.toString());
-			
+	public PreparedStatement prepareStatement(Connection con) throws SQLException{
+		PreparedStatement ps;
+		ps = con.prepareStatement(query);
+		for(int i = 1; i <= values.length; i++){
+			ps.setObject(i, values[i-1]);
 		}
-		try {
-			return con.prepareStatement("");
-		} catch (SQLException e) {
-			System.out.println("Could not return an empty statement! Something is REALLY wrong!");
-			e.printStackTrace();
-			return null;
-		}
+		return ps;
 	}
+	
+	/**
+	 * Used for debugging. This stacktrace is recorded when the statement
+	 * is created, so printing it to the screen will provide useful debugging
+	 * information about where the query came from, if something went wrong
+	 * while executing it.
+	 * @return The stacktrace elements.
+	 */
+	public StackTraceElement[] getStackTrace(){
+		return stacktrace.getStackTrace();
+	}
+	
 	/**
 	 * @return A string representation of this statement. Returns <italic>"Query: " + query + ", values: " + Arrays.toString(values).</italic>
 	 */

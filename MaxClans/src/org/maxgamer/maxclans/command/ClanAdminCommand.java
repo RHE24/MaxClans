@@ -144,6 +144,8 @@ public class ClanAdminCommand implements CommandExecutor{
 				
 				inviter.getClan().add(invited);
 				
+				invited.update();
+				
 				Player inv = invited.getPlayer();
 				if(inv != null) inv.sendMessage(ChatColor.YELLOW + "You have been forced to join " + inviter.getClan().getName() + " by an admin.");
 				

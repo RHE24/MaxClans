@@ -138,7 +138,7 @@ public class MaxClans extends JavaPlugin{
 			cc.update();
 		}
 		ClanManager.unload();
-		ClanManager.getDatabase().getDatabaseWatcher().run();
+		ClanManager.getDatabase().close();
 		
 		if(ps != null){
 			ps.close();
