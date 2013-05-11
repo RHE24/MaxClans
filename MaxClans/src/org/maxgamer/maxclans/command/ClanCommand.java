@@ -216,6 +216,7 @@ public class ClanCommand implements CommandExecutor, Listener{
 				}
 				
 				getEcon().withdrawPlayer(p.getName(), MaxClans.instance.clanCost);
+				getEcon().depositPlayer("tax-account", MaxClans.instance.clanCost); //TaxTime!
 				
 				Clan clan = ClanManager.createClan(name);
 				clan.add(cm);

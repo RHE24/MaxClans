@@ -53,7 +53,6 @@ public class PlayerListener extends MaxClansListener{
 			}
 			else{
 				//Same clan, but they have FF on, so they can damage each other.
-				System.out.println("8");
 				return;				
 			}
 		}
