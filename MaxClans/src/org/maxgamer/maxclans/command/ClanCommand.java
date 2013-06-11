@@ -65,6 +65,61 @@ public class ClanCommand implements CommandExecutor, Listener{
 		createMessages.add(ChatColor.RED + "%1$s "+ChatColor.GREEN+"has given life to "+ChatColor.RED+"%2$s"+ChatColor.GREEN+"!");
 		createMessages.add(""+ChatColor.RED+"%2$s "+ChatColor.GREEN+"has risen by the hand of "+ChatColor.RED + "%1$s "+ChatColor.GREEN+"!");
 		
+		//setname command, but costs $
+		BaseCommand rename = new BaseCommand(){
+			@Override
+			public void onRun(CommandSender sender, String[] args) {
+				Player p = (Player) sender;
+				StringBuilder sb = new StringBuilder(args[1]);
+				for(int i = 2; i < args.length; i++){
+					sb.append(" " + args[i]);
+				}
+				String name = sb.toString();
+				
+				Clan clan = ClanManager.getClan(name, true);
+				if(clan != null){
+					sender.sendMessage(ChatColor.RED + "A clan with that name already exists!");
+					return;
+				}
+				
+				if(name.length() > 20){
+					sender.sendMessage(ChatColor.RED + "That name is too long. Max 20 chars!");
+					return;
+				}
+				
+				String invalid = Util.getInvalidChars(name);
+				if(!invalid.isEmpty()){
+					sender.sendMessage(ChatColor.RED + "The clan name may not contain the following: '" + invalid + "'.");
+					return;
+				}
+				
+				if(getEcon().getBalance(p.getName()) < MaxClans.instance.getConfig().getDouble("rename-cost")){
+					p.sendMessage(ChatColor.RED + "You don't have enough to pay for that!");
+					return;
+				}
+				if(getEcon().withdrawPlayer(p.getName(), MaxClans.instance.getConfig().getDouble("rename-cost")).transactionSuccess() == false){
+					p.sendMessage(ChatColor.RED + "Failed to withdraw name change price from account!");
+					return;
+				}
+				getEcon().depositPlayer("tax-account", MaxClans.instance.getConfig().getDouble("rename-cost"));
+				
+				ClanMember cm = ClanManager.getClanMember(p);
+				cm.getClan().setName(name);
+				
+				p.sendMessage(ChatColor.GREEN + "Renamed your clan to: " + name);
+				cm.getClan().sendMessage(ChatColor.GREEN + p.getName() + " renamed clan to " + ChatColor.YELLOW + name, 0, cm);
+			}
+		};
+		rename.console = false;
+		rename.needsClan = true;
+		rename.num_args = 1;
+		rename.perm = "maxclans.setname";
+		rename.usage = "/clan setname";
+		rename.rank = 3;
+		rename.description = "Force changes a clan name for a fee of $" + MaxClans.instance.getConfig().getDouble("rename-cost") + "!";
+		
+		commands.put("rename", rename);
+		
 		//Info command
 		BaseCommand info = new BaseCommand(){
 			@Override

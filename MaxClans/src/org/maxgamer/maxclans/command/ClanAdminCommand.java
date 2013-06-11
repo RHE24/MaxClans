@@ -109,7 +109,6 @@ public class ClanAdminCommand implements CommandExecutor{
 				
 				p.sendMessage(ChatColor.GREEN + "Renamed your clan to: " + name);
 			}
-			
 		};
 		setname.console = false;
 		setname.needsClan = true;

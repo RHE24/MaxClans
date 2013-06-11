@@ -1,6 +1,7 @@
 clan:
     cost: 5000
     chest-rows: 2 #Number of chest rows for /clan chest
+    rename-cost: 2000
     
 blacklisted:
     - arena
